@@ -1,6 +1,6 @@
 <?php
 
-namespace SAlexsan\TaskManager\Model;
+namespace SAlexsan\TaskManager\Service;
 
 use SAlexsan\TaskManager\Model\Task;
 
@@ -8,17 +8,28 @@ class TaskManager
 {
     private array $listOfTask;
 
-    public function addTasks(Task $taks): void
+    public function addTask(Task $task): bool
     {
-        $this->listOfTask[$taks->getId()] = $taks;
+        try {
+            $this->listOfTask[$task->getId()] = $task;
+        } catch (\Throwable $th) {
+            return false;
+        }
+
+        return true;
     }
 
-    public function removeTask(int $id): void
+    public function removeTask(string $id): bool
     {
-        unset($listOfTask[$id]);
+        if(isset($this->listOfTask[$id])) {
+            unset($this->listOfTask[$id]);
+            return true;
+        }
+
+        return false;
     }
 
-    public function getTaskById(int $id): Task 
+    public function getTaskById(string $id): Task 
     {
         return $this->listOfTask[$id];
     }
@@ -32,10 +43,9 @@ class TaskManager
     {
         return array_filter(
             $this->listOfTask, 
-            function(int $id, Task $task) use ($status) {
+            function(Task $task) use ($status) {
                 return $task->getStatus() == $status;
-            }, 
-            ARRAY_FILTER_USE_BOTH
+            }
         );
     }
 }
