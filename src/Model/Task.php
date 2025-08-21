@@ -4,11 +4,11 @@ namespace SAlexsan\TaskManager\Model;
 
 use SAlexsan\TaskManager\Traits\HasFormattedDate;
 use DateTime;
-class Tasks 
+class Task 
 {
     use HasFormattedDate;
 
-    private int $id;
+    private string $id;
     private string $title;
     private string $description;
     private string $status;
@@ -23,7 +23,7 @@ class Tasks
         $this->createdAt = new DateTime();
     }
 
-    public function getId(): int 
+    public function getId(): string 
     {
         return $this->id;
     }
@@ -38,9 +38,14 @@ class Tasks
         return $this->description;
     }
 
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function markAsInProgess()
     {
-        $this->status = 'pendente';
+        $this->status = 'em andamento';
     }
     
     public function maskAsCompleted()
@@ -50,7 +55,7 @@ class Tasks
 
     public function __toString()
     {
-        return "Tasks: {
+        return "Task: {
             id: $this->id,
             title: $this->title,
             description: $this->description,
